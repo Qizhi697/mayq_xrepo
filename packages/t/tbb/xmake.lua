@@ -1,5 +1,4 @@
 package("tbb")
-
     set_homepage("https://software.intel.com/en-us/tbb/")
     set_description("Threading Building Blocks (TBB) lets you easily write parallel C++ programs that take full advantage of multicore performance, that are portable, composable and have future-proof scalability.")
 
@@ -26,20 +25,14 @@ package("tbb")
         add_versions("2021.5.0", "e5b57537c741400cf6134b428fc1689a649d7d38d9bb9c1b6d64f092ea28178a")
         add_versions("2021.7.0", "2cae2a80cda7d45dc7c072e4295c675fff5ad8316691f26f40539f7e7e54c0cc")
 
-        add_patches("2021.2.0", path.join(os.scriptdir(), "patches", "2021.2.0", "gcc11.patch"), "181511cf4878460cb48ac0531d3ce8d1c57626d698e9001a0951c728fab176fb")
-        add_patches("2021.5.0", path.join(os.scriptdir(), "patches", "2021.5.0", "i386.patch"), "1a1c11724839cf98b1b8f4d415c0283ec7719c330b11503c578739eb02889ec0")
-
-        if is_plat("macosx") then
-            add_configs("compiler", {description = "Compiler used to compile tbb." , default = "clang", type = "string", values = {"clang", "gcc", "icc", "cl", "icl", "[others]"}})
-        else
-            add_configs("compiler", {description = "Compiler used to compile tbb." , default = "gcc", type = "string", values = {"gcc", "clang", "icc", "cl", "icl", "[others]"}})
-        end
+        -- add_patches("2021.2.0", path.join(os.scriptdir(), "patches", "2021.2.0", "gcc11.patch"), "181511cf4878460cb48ac0531d3ce8d1c57626d698e9001a0951c728fab176fb")
+        -- add_patches("2021.5.0", path.join(os.scriptdir(), "patches", "2021.5.0", "i386.patch"), "1a1c11724839cf98b1b8f4d415c0283ec7719c330b11503c578739eb02889ec0")
     end
 
     add_configs("shared", {description = "Build shared library.", default = true, type = "boolean", readonly = true})
 
-    on_fetch("fetch")
-
+    -- on_fetch("fetch")
+    
     add_links("tbb", "tbbmalloc", "tbbmalloc_proxy")
 
     on_load(function (package)
@@ -88,33 +81,6 @@ package("tbb")
                 package:addenv("PATH", "lib")
             end
         end
-    end)
-
-    on_install("windows", function (package)
-        if package:version():ge("2021.0") then
-            local configs = {"-DTBB_TEST=OFF", "-DTBB_STRICT=OFF"}
-            table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-            import("package.tools.cmake").install(package, configs)
-        else
-            local incdir = "tbb/include"
-            local libdir = "tbb/lib/"
-            local bindir = "tbb/bin/"
-            os.cp(incdir, package:installdir())
-            local prefix = ""
-            if package:is_arch("x64", "x86_64") then
-                prefix = "intel64/vc14"
-            else
-                prefix = "ia32/vc14"
-            end
-            if package:config("debug") then
-                os.cp(libdir .. prefix .. "/*_debug.*", package:installdir("lib"))
-                os.cp(bindir .. prefix .. "/*_debug.*", package:installdir("bin"))
-            else
-                os.cp(libdir .. prefix .. "/**|*_debug.*", package:installdir("lib"))
-                os.cp(bindir .. prefix .. "/**|*_debug.*", package:installdir("bin"))
-            end
-        end
-        package:addenv("PATH", "bin")
     end)
 
     on_test(function (package)
