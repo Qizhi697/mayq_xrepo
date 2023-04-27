@@ -33,7 +33,7 @@ package("hwloc")
         os.cp("include", package:installdir())
         os.cp("lib/*|*.a", package:installdir("lib"))
     end)
-
+    add_links("dl")
     on_install("macosx", "linux", function (package)
         import("package.tools.autoconf").install(package)
     end)
