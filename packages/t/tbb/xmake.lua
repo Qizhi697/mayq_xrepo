@@ -47,7 +47,7 @@ package("tbb")
             package:add("deps", "cmake")
         end
     end)
-
+    add_deps("hwloc")
     on_install("macosx", "linux", "mingw@windows", "mingw@msys", "android", function (package)
         if package:version():ge("2021.0") then
             if package:version():le("2021.4") and package:is_plat("mingw") then
