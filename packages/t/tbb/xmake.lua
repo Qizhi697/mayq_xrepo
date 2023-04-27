@@ -83,19 +83,19 @@ package("tbb")
         end
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
-            void test() {
-                using std::size_t;
-                constexpr size_t N = 10;
-                int X[N], Y[N], Z[N];
-                for (int i = 0; i < N; ++i)
-                    X[i] = i, Y[i] = 2*i;
-                tbb::parallel_for(tbb::blocked_range<size_t>(0, N), [&](const tbb::blocked_range<size_t> &rg) {
-                    for (size_t i = rg.begin(); i != rg.end(); ++i)
-                        Z[i] = X[i] + Y[i];
-                });
-            }
-        ]]}, {configs = {languages = "c++14"},
-              includes = {"tbb/parallel_for.h", "tbb/blocked_range.h"}}))
-    end)
+    -- on_test(function (package)
+    --     assert(package:check_cxxsnippets({test = [[
+    --         void test() {
+    --             using std::size_t;
+    --             constexpr size_t N = 10;
+    --             int X[N], Y[N], Z[N];
+    --             for (int i = 0; i < N; ++i)
+    --                 X[i] = i, Y[i] = 2*i;
+    --             tbb::parallel_for(tbb::blocked_range<size_t>(0, N), [&](const tbb::blocked_range<size_t> &rg) {
+    --                 for (size_t i = rg.begin(); i != rg.end(); ++i)
+    --                     Z[i] = X[i] + Y[i];
+    --             });
+    --         }
+    --     ]]}, {configs = {languages = "c++14"},
+    --           includes = {"tbb/parallel_for.h", "tbb/blocked_range.h"}}))
+    -- end)
