@@ -1,0 +1,6 @@
+package("sparsehash")
+    set_sourcedir(path.join("third_part", "sparsehash"))
+    on_install("linux", function (package)
+        os.vrun("./configure %s --prefix=\"%s\"", package:debug() and "--debug" or "", package:installdir())
+        import("package.tools.make").install(package)
+    end)
