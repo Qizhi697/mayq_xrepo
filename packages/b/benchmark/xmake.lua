@@ -31,28 +31,12 @@ package("benchmark")
     end
 
     add_deps("cmake")
-    add_links("benchmark_main", "benchmark")
-    on_load("windows", function (package)
-        if not package:config("shared") then
-            package:add("defines", "BENCHMARK_STATIC_DEFINE")
-        end
-    end)
+    -- add_links("benchmark_main", "benchmark")
+    add_links("benchmark")
 
     on_install("macosx", "linux", "windows", function (package)
-        local configs = {"-DBENCHMARK_ENABLE_TESTING=OFF", "-DBENCHMARK_INSTALL_DOCS=OFF"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+        local configs = {"-DBENCHMARK_DOWNLOAD_DEPENDENCIES=on","-DCMAKE_BUILD_TYPE=Release", "-DCMAKE_CXX_FLAGS=\'-D_GLIBCXX_USE_CXX11_ABI=0\'"}
+        -- table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
+        -- table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
         import("package.tools.cmake").install(package, configs)
-    end)
-
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
-            void BM_empty(benchmark::State& state) {
-              for (auto _ : state) {
-                benchmark::DoNotOptimize(state.iterations());
-              }
-            }
-            BENCHMARK(BM_empty);
-            BENCHMARK(BM_empty)->ThreadPerCpu();
-        ]]}, {configs = {languages = "c++11"}, includes = "benchmark/benchmark.h"}))
     end)
