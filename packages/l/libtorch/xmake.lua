@@ -32,6 +32,7 @@ package("libtorch")
     end
 
     add_deps("cmake")
+    add_deps("libomp")
     add_deps("python 3.x", {kind = "binary"})
 
     add_includedirs("include")
