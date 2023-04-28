@@ -23,7 +23,7 @@ package("libomp")
         add_extsources("brew::libomp")
     elseif is_plat("linux") then
         add_extsources("apt::libomp-dev")
-        add_syslinks("pthread", "dl")
+        add_syslinks("pthread", "dl", "rt")
     end
 
     on_install("macosx", "linux", "cross", function (package)
