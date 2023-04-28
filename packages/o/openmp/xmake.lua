@@ -2,6 +2,8 @@ package("openmp")
 
     set_homepage("https://openmp.org/")
     set_description("The OpenMP API specification for parallel programming")
+    add_urls("https://github.com/llvm-mirror/openmp.git",
+             "https://github.com/llvm-mirror/openmp.git")
 
     add_configs("runtime",      {description = "Set OpenMP runtime for gcc/clang like compilers.", default = "default", type = "string", values = {"default", "custom"}})
     add_configs("experimental", {description = "Enable experimental OpenMP feature for msvc.", default = false, type = boolean})
@@ -70,6 +72,7 @@ package("openmp")
 
     on_install("linux", "macosx", "windows", "mingw@msys", function (package)
         -- we need not install anything because we need only compiler flags and deps
+        import("package.tools.cmake").install(package, configs)
     end)
 
     on_test(function (package)
