@@ -35,8 +35,11 @@ package("benchmark")
     -- add_links("benchmark")
 
     on_install("macosx", "linux", "windows", function (package)
-        local configs = {"-DBENCHMARK_DOWNLOAD_DEPENDENCIES=on","-DCMAKE_BUILD_TYPE=Release", "-DCMAKE_CXX_FLAGS=\'-D_GLIBCXX_USE_CXX11_ABI=0\'"}
+        -- local configs = {"-DBENCHMARK_DOWNLOAD_DEPENDENCIES=on","-DCMAKE_BUILD_TYPE=Release", "-DCMAKE_CXX_FLAGS=\'-D_GLIBCXX_USE_CXX11_ABI=0\'"}
         -- table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
         -- table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
-        import("package.tools.cmake").install(package, configs)
+        -- import("package.tools.cmake").install(package, configs)
+        os.vrun("cmake -DBENCHMARK_DOWNLOAD_DEPENDENCIES=on -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS='-D_GLIBCXX_USE_CXX11_ABI=0'")
+        os.vrun("make")
+        os.vrun("make install")
     end)
