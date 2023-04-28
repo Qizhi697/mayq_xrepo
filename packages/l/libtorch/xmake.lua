@@ -32,7 +32,6 @@ package("libtorch")
     end
 
     add_deps("cmake")
-    add_deps("openmp")
     add_deps("python 3.x", {kind = "binary"})
 
     add_includedirs("include")
