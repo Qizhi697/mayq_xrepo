@@ -27,7 +27,6 @@ package("gflags")
             "-DBUILD_TESTING=OFF",
             "-DGFLAGS_REGISTER_BUILD_DIR=OFF",
             "-DGFLAGS_REGISTER_INSTALL_PREFIX=OFF",
-            "-DCMAKE_CXX_FLAGS='-D_GLIBCXX_USE_CXX11_ABI=0'",
         }
         table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
         table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
