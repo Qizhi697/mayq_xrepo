@@ -15,7 +15,7 @@ package("glog")
         add_configs(config, {description = "Enable " .. dep .. " support.", default = (config == "gflags"), type = "boolean"})
     end
 
-    add_deps("cmake")
+    -- add_deps("cmake")
 
     if is_plat("linux") then
         add_syslinks("pthread","dl")
