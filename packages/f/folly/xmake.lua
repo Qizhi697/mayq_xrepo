@@ -20,13 +20,13 @@ package("folly")
         add_configs("shared", {description = "Build shared library.", default = false, type = "boolean", readonly = true})
     end
 
-    add_deps("cmake")
+    -- add_deps("cmake")
     add_deps("boost", {configs = {context = true, filesystem = true, program_options = true, regex = true, system = true, thread = true}})
     add_deps("libevent", {configs = {openssl = true}})
     add_deps("double-conversion", "gflags", "glog", "zlib", "fmt")
     add_deps("bzip2", "lz4", "zstd", {optional = true})
     if is_plat("linux") then
-        add_syslinks("pthread")
+        add_syslinks("pthread", "ld")
     end
 
     on_install("windows|x64", "linux", "macosx", function (package)
