@@ -17,7 +17,7 @@ package("gflags")
             if package:is_plat("windows", "mingw") then
                 package:add("syslinks", "shlwapi")
             elseif package:is_plat("linux") then
-                package:add("syslinks", "pthread")
+                package:add("syslinks", "pthread", "dl")
             end
         end
     end)
