@@ -26,7 +26,7 @@ package("folly")
     add_deps("double-conversion", "gflags", "glog", "zlib", "fmt")
     add_deps("bzip2", "lz4", "zstd", {optional = true})
     if is_plat("linux") then
-        add_syslinks("pthread", "ld")
+        add_syslinks("pthread", "dl")
     end
 
     on_install("windows|x64", "linux", "macosx", function (package)
