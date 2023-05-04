@@ -98,8 +98,7 @@ package("folly")
                          "-DCMAKE_DISABLE_FIND_PACKAGE_LibURCU=ON",
                          "-DLIBAIO_FOUND=OFF",
                          "-DLIBURCU_FOUND=OFF",
-                         "-DBOOST_LINK_STATIC=ON",
-                         "-DCMAKE_CXX_FLAGS='-D_GLIBCXX_USE_CXX11_ABI=0'",}
+                         "-DBOOST_LINK_STATIC=ON"}
         table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
         table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
         if package:is_plat("windows") then
