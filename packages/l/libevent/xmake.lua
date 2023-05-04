@@ -11,7 +11,7 @@ package("libevent")
     add_configs("openssl", {description = "Build with OpenSSL library.", default = false, type = "boolean"})
     add_configs("mbedtls", {description = "Build with mbedtls library.", default = false, type = "boolean"})
 
-    add_deps("cmake")
+    -- add_deps("cmake")
 
     if is_plat("windows") then
         add_syslinks("ws2_32", "advapi32", "iphlpapi")
@@ -27,14 +27,15 @@ package("libevent")
     end)
 
     on_install("windows", "linux", "macosx", function (package)
-        io.replace("CMakeLists.txt", "advapi32", "advapi32 crypt32", {plain = true})
-        if package:version():eq("2.1.12") then
-            io.replace("cmake/LibeventConfig.cmake.in",
-                'get_filename_component(_INSTALL_PREFIX "${LIBEVENT_CMAKE_DIR}/../../.." ABSOLUTE)',
-                'get_filename_component(_INSTALL_PREFIX "${LIBEVENT_CMAKE_DIR}/../.." ABSOLUTE)',
-                {plain = true})
-            io.replace("cmake/LibeventConfig.cmake.in", "NO_DEFAULT_PATH)", ")", {plain = true})
-        end
+        import("package.tools.cmake").install(package, configs)
+        -- io.replace("CMakeLists.txt", "advapi32", "advapi32 crypt32", {plain = true})
+        -- if package:version():eq("2.1.12") then
+        --     io.replace("cmake/LibeventConfig.cmake.in",
+        --         'get_filename_component(_INSTALL_PREFIX "${LIBEVENT_CMAKE_DIR}/../../.." ABSOLUTE)',
+        --         'get_filename_component(_INSTALL_PREFIX "${LIBEVENT_CMAKE_DIR}/../.." ABSOLUTE)',
+        --         {plain = true})
+        --     io.replace("cmake/LibeventConfig.cmake.in", "NO_DEFAULT_PATH)", ")", {plain = true})
+        -- end
 
         local configs = {"-DEVENT__DISABLE_TESTS=ON", "-DEVENT__DISABLE_REGRESS=ON", "-DEVENT__DISABLE_SAMPLES=ON"}
         table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
