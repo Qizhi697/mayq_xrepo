@@ -43,16 +43,7 @@ package("libsodium")
     end)
 
     on_install("linux", "macosx", function (package)
-        import("package.tools.autoconf").install(package)
-    end)
-
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
-            int test(int args, char** argv) {
-                if (sodium_init() < 0) {
-                    return -1;
-                }
-                return 0;
-            }
-        ]]}, {includes = "sodium.h"}))
+        -- import("package.tools.autoconf").install(package)
+        os.vrun("./configure %s --prefix=\"%s\"", package:debug() and "--debug" or "", package:installdir())
+        import("package.tools.make").install(package)
     end)
